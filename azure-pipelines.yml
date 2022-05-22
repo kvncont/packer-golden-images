@@ -20,8 +20,10 @@ pool:
 
 variables:
   - group: group-pkr-vars
+  - name: image-id
+    value: $[replace(variables['Build.BuildNumber'], '.', '-')]
   - name: image-name
-    value: azdo-agent-pool-$[replace($(Build.BuildNumber), '.', '-')]
+    value: azdo-agent-pool-$(image-id)
   - name: workingDirectory
     value: $(System.DefaultWorkingDirectory)/ubuntu/azdo-agent-pools/
 
@@ -51,7 +53,7 @@ stages:
         targetType: 'inline'
         script: |
           packer validate \
-          -var="image_name=$(image-name)-$(Build.BuildNumber)" .
+          -var="image_name=$(image-name)" .
         workingDirectory: '$(workingDirectory)'
 
     - task: Bash@3
@@ -65,7 +67,7 @@ stages:
         targetType: 'inline'
         script: |
           packer inspect \
-          -var="image_name=$(image-name)-$(Build.BuildNumber)" .
+          -var="image_name=$(image-name)" .
         workingDirectory: '$(workingDirectory)'
     
     - task: Bash@3
