@@ -1,0 +1,60 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - .gitignore
+      - README.md
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: group-pkr-vars
+  - name: image-name
+    value: azdo-agent-pool
+  - name: workingDirectory
+    value: $(System.DefaultWorkingDirectory)/ubuntu/azdo-agent-pools
+
+stages:
+- stage: Build
+  displayName: Build Image
+  jobs:
+  - job: Build_Image
+    steps:
+    - task: Bash@3
+      displayName: Packer format
+      inputs:
+        script: packer fmt -check .
+        workingDirectory: $(workingDirectory)
+
+    - task: Bash@3
+      displayName: Packer validate
+      inputs:
+        script: |
+          packer validate \
+          -var="image_name=$(image-name)-$(Build.BuildNumber)" .
+        workingDirectory: $(workingDirectory)
+
+    - task: Bash@3
+      displayName: Packer inspect
+      inputs:
+        script: |
+          packer inspect \
+          -var="image_name=$(image-name)-$(Build.BuildNumber)" .
+        workingDirectory: $(workingDirectory)
+    
+    - task: Bash@3
+      displayName: Packer build
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      env:
+        PKR_VAR_client_id: $(pkr-client-id)
+        PKR_VAR_client_secret: $(pkr-client-secret)
+        PKR_VAR_subscription_id: $(az-subscription-id)
+        PKR_VAR_tenant_id: $(az-tenant-id)
+      inputs:
+        script: |
+          packer build \
+          -var="image_name=$(image-name)-$(Build.BuildNumber)" .
+        workingDirectory: $(workingDirectory)
