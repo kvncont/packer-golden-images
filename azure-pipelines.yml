@@ -33,37 +33,30 @@ stages:
     displayName: Build image
     steps:
     - task: Bash@3
+      displayName: Packer format
       inputs:
         targetType: 'inline'
         script: |
-          ls -la
-          ls -la $(workingDirectory)
-          packer -v
+          packer fmt -check .
         workingDirectory: '$(workingDirectory)'
-
-    - task: Bash@3
-      displayName: Packer format
-      inputs:
-        script: |
-          ls -la
-          packer fmt -check /.
-        workingDirectory: $(workingDirectory)
 
     - task: Bash@3
       displayName: Packer validate
       inputs:
+        targetType: 'inline'
         script: |
           packer validate \
           -var="image_name=$(image-name)-$(Build.BuildNumber)" .
-        workingDirectory: $(workingDirectory)
+        workingDirectory: '$(workingDirectory)'
 
     - task: Bash@3
       displayName: Packer inspect
       inputs:
+        targetType: 'inline'
         script: |
           packer inspect \
           -var="image_name=$(image-name)-$(Build.BuildNumber)" .
-        workingDirectory: $(workingDirectory)
+        workingDirectory: '$(workingDirectory)'
     
     - task: Bash@3
       displayName: Packer build
@@ -74,7 +67,8 @@ stages:
         PKR_VAR_subscription_id: $(az-subscription-id)
         PKR_VAR_tenant_id: $(az-tenant-id)
       inputs:
+        targetType: 'inline'
         script: |
           packer build \
           -var="image_name=$(image-name)-$(Build.BuildNumber)" .
-        workingDirectory: $(workingDirectory)
+        workingDirectory: '$(workingDirectory)'
