@@ -42,7 +42,9 @@ stages:
     - task: Bash@3
       displayName: Packer format
       inputs:
-        script: packer fmt -check .
+        script: |
+          ls -la
+          packer fmt -check .
         workingDirectory: $(workingDirectory)
 
     - task: Bash@3
