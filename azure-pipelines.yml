@@ -30,6 +30,7 @@ stages:
   displayName: Build Image
   jobs:
   - job: Build_Image
+    displayName: Build image
     steps:
     - task: Bash@3
       inputs:
@@ -38,13 +39,14 @@ stages:
           ls -la
           ls -la $(workingDirectory)
           packer -v
+        workingDirectory: '$(workingDirectory)'
 
     - task: Bash@3
       displayName: Packer format
       inputs:
         script: |
           ls -la
-          packer fmt -check .
+          packer fmt -check /.
         workingDirectory: $(workingDirectory)
 
     - task: Bash@3
