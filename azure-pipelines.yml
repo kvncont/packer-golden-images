@@ -42,6 +42,11 @@ stages:
 
     - task: Bash@3
       displayName: Packer validate
+      env:
+        PKR_VAR_client_id: $(pkr-client-id)
+        PKR_VAR_client_secret: $(pkr-client-secret)
+        PKR_VAR_subscription_id: $(az-subscription-id)
+        PKR_VAR_tenant_id: $(az-tenant-id)
       inputs:
         targetType: 'inline'
         script: |
@@ -51,6 +56,11 @@ stages:
 
     - task: Bash@3
       displayName: Packer inspect
+      env:
+        PKR_VAR_client_id: $(pkr-client-id)
+        PKR_VAR_client_secret: $(pkr-client-secret)
+        PKR_VAR_subscription_id: $(az-subscription-id)
+        PKR_VAR_tenant_id: $(az-tenant-id)
       inputs:
         targetType: 'inline'
         script: |
