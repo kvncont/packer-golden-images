@@ -37,6 +37,7 @@ stages:
         script: |
           ls -la
           ls -la $(workingDirectory)
+          packer -v
 
     - task: Bash@3
       displayName: Packer format
