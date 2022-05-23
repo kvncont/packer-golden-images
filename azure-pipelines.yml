@@ -24,7 +24,7 @@ variables:
     value: $[replace(variables['Build.BuildNumber'], '.', '-')]
   - name: image-name
     value: azdo-agent-pool-$(image-id)
-  - name: workingDirectory
+  - name: working-directory
     value: $(System.DefaultWorkingDirectory)/ubuntu/azdo-agent-pools/
 
 stages:
@@ -40,7 +40,7 @@ stages:
         targetType: 'inline'
         script: |
           packer fmt -check .
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(working-directory)'
 
     - task: Bash@3
       displayName: Packer validate
@@ -54,7 +54,7 @@ stages:
         script: |
           packer validate \
           -var="image_name=$(image-name)" .
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(working-directory)'
 
     - task: Bash@3
       displayName: Packer inspect
@@ -68,7 +68,7 @@ stages:
         script: |
           packer inspect \
           -var="image_name=$(image-name)" .
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(working-directory)'
 
     - task: Bash@3
       displayName: Packer build
@@ -83,7 +83,7 @@ stages:
         script: |
           packer build \
           -var="image_name=$(image-name)" .
-        workingDirectory: '$(workingDirectory)'
+        workingDirectory: '$(working-directory)'
 
     - task: PublishPipelineArtifact@1
       displayName: Publish packer artifact
