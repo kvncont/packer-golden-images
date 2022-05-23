@@ -70,25 +70,25 @@ stages:
           -var="image_name=$(image-name)" .
         workingDirectory: '$(working-directory)'
 
-    - task: Bash@3
-      displayName: Packer build
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-      env:
-        PKR_VAR_client_id: $(pkr-client-id)
-        PKR_VAR_client_secret: $(pkr-client-secret)
-        PKR_VAR_subscription_id: $(az-subscription-id)
-        PKR_VAR_tenant_id: $(az-tenant-id)
-      inputs:
-        targetType: 'inline'
-        script: |
-          packer build \
-          -var="image_name=$(image-name)" .
-        workingDirectory: '$(working-directory)'
+    # - task: Bash@3
+    #   displayName: Packer build
+    #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    #   env:
+    #     PKR_VAR_client_id: $(pkr-client-id)
+    #     PKR_VAR_client_secret: $(pkr-client-secret)
+    #     PKR_VAR_subscription_id: $(az-subscription-id)
+    #     PKR_VAR_tenant_id: $(az-tenant-id)
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       packer build \
+    #       -var="image_name=$(image-name)" .
+    #     workingDirectory: '$(working-directory)'
 
-    - task: PublishPipelineArtifact@1
-      displayName: Publish packer artifact
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-      inputs:
-        targetPath: '$(working-directory)/packer-manifest.json'
-        artifact: 'Packer manifest'
-        publishLocation: 'pipeline'
+    # - task: PublishPipelineArtifact@1
+    #   displayName: Publish packer artifact
+    #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    #   inputs:
+    #     targetPath: '$(working-directory)/packer-manifest.json'
+    #     artifact: 'Packer manifest'
+    #     publishLocation: 'pipeline'
