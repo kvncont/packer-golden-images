@@ -23,9 +23,9 @@ source "azure-arm" "azdo-agent-pool" {
 build {
   sources = ["source.azure-arm.azdo-agent-pool"]
 
-  provisioner "shell" {
-    scripts = ["install_packages.sh"]
-  }
+  // provisioner "shell" {
+  //   scripts = ["config/install_packages.sh"]
+  // }
 
   post-processor "manifest" {}
 }

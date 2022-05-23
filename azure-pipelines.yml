@@ -19,7 +19,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - group: group-pkr-vars
+  - group: group-pkr-secrets
   - name: image-id
     value: $[replace(variables['Build.BuildNumber'], '.', '-')]
   - name: image-name
@@ -69,7 +69,7 @@ stages:
           packer inspect \
           -var="image_name=$(image-name)" .
         workingDirectory: '$(workingDirectory)'
-    
+
     - task: Bash@3
       displayName: Packer build
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
@@ -84,3 +84,11 @@ stages:
           packer build \
           -var="image_name=$(image-name)" .
         workingDirectory: '$(workingDirectory)'
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish packer artifact
+      # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+      inputs:
+        targetPath: '$(working-directory)/packer-manifest.json'
+        artifact: 'Packer manifest'
+        publishLocation: 'pipeline'
