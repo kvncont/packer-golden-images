@@ -15,6 +15,13 @@ pr:
     - .gitignore
     - README.md
 
+schedules:
+- cron: "0 0 * * 1" # cron syntax defining a schedule
+  displayName: Weekly build # friendly name given to a specific schedule
+  branches:
+    include: main # which branches the schedule applies to
+  always: true # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.
+
 pool:
   vmImage: ubuntu-latest
 
