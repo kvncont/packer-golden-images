@@ -70,3 +70,9 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 # Install IBM JDK 1.8
 echo ">>>>>>>>>> IBM JDK 1.8 <<<<<<<<<<"
+
+# Setup Environment Variables
+echo ">>>>>>>>>> Setting up environment variables... <<<<<<<<<<"
+echo "JAVA_HOME_8_X64=/usr/lib/jvm/java-8-openjdk-amd64/bin/java" >> /etc/environment
+echo "JAVA_HOME_11_X64=/usr/lib/jvm/java-11-openjdk-amd64/bin/java" >> /etc/environment
+echo "JAVA_HOME_17_X64=/usr/lib/jvm/java-17-openjdk-amd64/bin/java" >> /etc/environment
